@@ -69,7 +69,7 @@ $('#form_data').on('submit', function(e) { //use on if jQuery 1.7+
       
         var alpha = data.split("");
                 
-        var url = "http://localhost/Dictionary_online/src/"+ alpha[0].toUpperCase() + "/html/" + alpha[0].toLowerCase() + "1_uni.html#" + data;
+        var url = "http://shivasdst.github.io/src/"+ alpha[0].toUpperCase() + "/html/" + alpha[0].toLowerCase() + "1_uni.html#" + data;
         //alert(url);
 		window.location.replace(url);
     });
