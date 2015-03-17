@@ -771,3 +771,11 @@ div.seealso{
 .alpha_list{
 	margin-top: 3em;
 }
+
+.label_word{
+	font-size: 0.8em;
+}
+
+#form_data{
+	margin-top: 2em;
+}
