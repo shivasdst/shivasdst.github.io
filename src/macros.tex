@@ -1,0 +1,288 @@
+\newcount\wordfflag
+\wordfflag=0
+\newtoks\prontok
+\newwrite\allentries
+\immediate\openout\allentries=dictionarywords
+\newwrite\likeentries
+\immediate\openout\likeentries=duplicatewords
+
+\def\mylaunch#1{\pdflaunchlink{a_scripts/#1.sh}{L}\;\;\pdflaunchlink{abatchfiles/#1.bat}{W}}
+\newcommand{\pdflaunchlink}[2]{%
+\pdfstartlink attr{/Border [0 0 0]} user{/Subtype /Link /A << %
+/S /Launch /F (#1) >>}%
+\pdfliteral{0 1 0 0 k}%
+{#2}\pdfliteral{0 0 0 1 k}\pdfendlink%
+}
+
+\def\general#1#2{\hypertarget{#1}\break{}\textcolor{red}{\rm\bfseries #2}\global\wordfflag=0}
+
+\def\word{\futurelet\new\macA}
+
+\def\macA{\ifx\new[\let\next=\wordfirst 
+\else
+  \ifx\new(\let\next=\wordparfirst
+  \else
+  \let\next=\wordsecond
+  \fi
+\fi 
+\next}
+
+
+
+%%Addanothertarget -- > #1 ---> target
+%%                      #2 ---> not needed
+\def\addanothertarget#1#2{%
+\hyperdef{A}{#1}{}
+\hypertarget{#1}{}
+\immediate\write\allentries{"#1",}%
+}
+
+
+%%wordwsas -- > #1 ---> hypertarget
+%%              #2 ---> material to be typeset(very complex)
+%%		#3 ---> see also data
+%% #1 will appear in the words list(dictionarywords.tex)
+%% words with this macros don't have speech, because of special case.
+%% This macro is generaly used for the comma seperated entries. 
+%% ex: (co-opt, coopt) (Z,z) (K,k)
+\def\wordwsas#1#2#3{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{#3}%
+\hfil\break\textcolor{red}{{\rm\bfseries #2}}%
+\immediate\write\allentries{"#1",}%
+\global\wordfflag=1}
+
+%%wordwosas -- > #1 ---> hypertarget
+%%               #2 ---> data to be typeset(in some cases it is
+%%               very complex for example see word cooperate in letter C
+%% #1.sh and #1.bat for speech.
+%% #1 will appear in the words list.              
+\def\wordwosas#1#2{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{}%
+\hfil\break\textcolor{red}{{\rm\bfseries #2}}%
+\immediate\write\allentries{"#1",}%
+\prontok={#1}\global\wordfflag=0}
+
+%%wordwosasf -- > #1 ---> hypertarget
+%%                #2 ---> data to be typeset
+%% words with this macro don't have speech
+%% #1 will appear in the list of words
+%% This macro is for foreign words
+\def\wordwosasf#1#2{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{}%
+\hfil\break\textcolor{red}{{\enbi #2}}%
+\immediate\write\allentries{"#1",}%
+\global\wordfflag=1}
+
+
+%%wordsidentical -- > #1 ---> hypertarget 
+%%                    #2 ---> data to be typeset.
+%% #1 will appear in the list of words. 
+%% #2.sh and #2.bat for speech		      
+\def\wordsidentical#1#2{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{}%
+\hfil\break\textcolor{red}{{\rm\bfseries #2}}%
+\immediate\write\allentries{"#1",}%
+\prontok={#2}\global\wordfflag=0}
+
+
+%%wordspecial -- > #1(#2) --- > hypertarget
+%%                 #3     --- > superscript for word
+%%                 #4     --- > see also data
+%% #1(#2) will appear in the words list.
+%% #1 will be typeset with #3 as superscript.
+%% #1.sh and #2.bat for speech.
+\def\wordspecial#1#2#3#4{%
+\hyperdef{A}{#1(#2)}{}%
+\hypertarget{#1(#2)}\break{{\rm\footnotesize\engit{\footnotesize See also #4}
+{}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#3}$}{\rm\bfseries #1}}%
+\immediate\write\allentries{"#1(#2)",}%
+\prontok={#1}\global\wordfflag=0}
+
+%%wordfirst -- > #1(#2) --- > hypertarget
+%%               #3     --- > word to be typeset with #2 as superscript 
+%%i.e #1 and #3 are same.  
+%% #1(#2) will appear in the words list.
+%% #1 will appear in duplicatewords.tex
+%% #1 will be used for speech
+\def\wordfirst[#1(#2)]#3{%
+\hyperdef{A}{#1(#2)}{}%
+\hypertarget{#1(#2)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1(#2)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#2}$}{\rm\bfseries #3}}%
+\immediate\write\allentries{"#1(#2)",}%
+\immediate\write\likeentries{#1}
+\prontok={#1}\global\wordfflag=0}
+
+%%wordparfirst -- > #1 #2(#3) --- > hypertarget
+%%                  #4        --- > word to be typeset with #3 as superscript
+%% i.e #1\ #2 and #4 are identical.  
+%% #1\ #2(#3) will appear in the list of words.
+%% #1\ #2 will appear in duplicatewords.tex
+%% #1-#2 will be used for speech (#1-#2.sh #1-#2.bat)
+\def\wordparfirst(#1 #2[#3])#4{%
+\hyperdef{A}{#1 #2(#3)}{}%
+\hypertarget{#1 #2(#3)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1-#2(#3)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#3}$}{\rm\bfseries #4}}%
+\immediate\write\allentries{"#1 #2(#3)",}%
+\immediate\write\likeentries{#1 #2}
+\prontok={#1-#2}\global\wordfflag=0}
+
+%%wordsecond -- > #1 --- > hypertarget
+%% #1 will appear in the words list.
+%% #1 will be used for speech.
+%% #1 will be typeset.               
+\def\wordsecond#1{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{\textcolor{red}{\rm\bfseries #1}}
+\immediate\write\allentries{"#1",}\prontok={#1}
+\global\wordfflag=0}
+
+%%wordwithhyphen  -- > #2 --- > hypertarget and word to be typeset.
+%% #1 will be used for the speech(#1.sh and #1.bat)
+%% #1 will appear in the words list.
+%% This macro is used for the words which starts with hyphen ex: -cele 
+\def\wordwithhyphen#1#2{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{\textcolor{red}{\rm\bfseries #2}}
+\immediate\write\allentries{"#1",}
+\prontok={#1}\global\wordfflag=0}
+
+%%wordnospeech -- > #1 --- > hypertarget
+%%                  #2 --- > word to be typeset.
+%% #1 will appear in the list of words.
+%% No speech   		     
+\def\wordnospeech#1#2{%
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{\textcolor{red}{\rm\bfseries #2}}
+\immediate\write\allentries{"#1",}}
+
+%%wordRemoveSpace -- > #2 --- > hypertarget
+%%                     #2 --- > word to be typeset
+%% #2 will appear in the words list.
+%% #1 for speech (#1.sh #1.bat)
+\def\wordRemoveSpace#1#2{%
+\hyperdef{A}{#2}{}%
+\hypertarget{#2}\break{\textcolor{red}{\rm\bfseries #2}}
+\immediate\write\allentries{"#2",}
+\prontok={#1}\global\wordfflag=0}
+
+
+%%fiveargs -- > #1\ #2\ #3(#4) --- > hypertarget
+%%              #5             --- > word to be typeset with #4 as superscript
+%% i.e #1\ #2\ #3 and #5 are identical
+%% #1\ #2\ #3(#4) will appear in the words list.
+%% #1\ #2\ #3 will appear in the duplicatewords.tex
+%% #1-#2-#3 for speech (#1-#2-#3.sh and #1-#2-#3.bat)
+\def\fiveargs#1 #2 #3(#4)#5{%
+\hyperdef{A}{#1 #2 #3(#4)}{}%
+\hypertarget{#1 #2 #3(#4)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1-#2-#3(#4)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#4}$}{\rm\bfseries #5}}
+\immediate\write\allentries{"#1 #2 #3(#4)",}
+\immediate\write\likeentries{#1 #2 #3}
+\prontok={#1-#2-#3}\global\wordfflag=0}
+
+
+%% Following are the macros which are used to typeset foreign
+%% words, and for foreign words we are leaving speech part.
+
+
+\def\wordf{\global\wordfflag=1\futurelet\new\macAf}
+
+\def\macAf{\ifx\new[\let\next=\wordfirstf 
+\else
+  \ifx\new(\let\next=\wordparfirstf
+  \else
+  \let\next=\wordsecondf
+ \fi
+\fi\next}
+
+
+%%wordfirstf  -- > #1(#2) --- > hypertarget
+%%                 #3     --- > word to be typeset with #2 as superscript
+%% i.e. #1 and #3 are identical.
+%% #1(#2) will appear in the words list
+%% #1 will appear in the duplicatewords.tex
+%% No speech   
+\def\wordfirstf[#1(#2)]#3{%
+\hyperdef{A}{#1(#2)}{}%
+\hypertarget{#1(#2)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1(#2)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#2}$}{\enbi #3}}%
+\immediate\write\allentries{"#1(#2)",}%
+\immediate\write\likeentries{#1}}
+
+
+%%wordparfirstf  -- > #1 #2(#3) --- > hypertarget
+%%                    #4        --- > word to be typeset with #3 as
+%%                    superscript
+%% #1\ #2 and #4 are identical
+%% #1\ #2(#3) will appear in the words list.
+%% #1\ #2 will appear in duplicatewords.tex 
+%% No speech
+\def\wordparfirstf(#1 #2[#3])#4{%
+\hyperdef{A}{#1 #2(#3)}{}%
+\hypertarget{#1 #2(#3)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1-#2(#3)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#3}$}{\enbi #4}}
+\immediate\write\allentries{"#1 #2(#3)",}%
+\immediate\write\likeentries{#1 #2}}
+
+%%fiveargsf -- > #1 #2 #3(#4) --- > hypertarget
+%%               #5           --- > word to be typeset with #4 as
+%%               superscript
+%% i.e. #1\ #2\ #3  and #5 are identical
+%% #1\ #2\ #3(#4) will appear in the words list.
+%% #1\ #2\ #3 will appear in duplicatewords.tex 
+%% No speech   
+\def\fiveargsf#1 #2 #3(#4)#5{%
+\hyperdef{A}{#1 #2 #3(#4)}{}%
+\hypertarget{#1 #2 #3(#4)}\break{{\rm\footnotesize\engit{\footnotesize See also} {\input #1-#2-#3(#4)
+}}}\hfil\break\textcolor{red}{\textcolor{superscript}{$^{#4}$}{\enbi #5}}
+\immediate\write\allentries{"#1 #2 #3(#4)",}
+\immediate\write\likeentries{#1 #2 #3}
+\global\wordfflag=1}
+
+%%wordsecondf  -- > #1 --- > hypertarget and also word to be typeset.
+%% #1 will appear in the words list.
+%% No speech   
+\def\wordsecondf#1{
+\hyperdef{A}{#1}{}%
+\hypertarget{#1}\break{\textcolor{red}{\enbi #1}}
+\immediate\write\allentries{"#1",}}
+
+\def\pron#1{\quad
+\ifx?#1
+\else
+  \ifnum\wordfflag=1
+  {\bf #1} 
+  \global\wordfflag=0
+  \else
+  {\bf #1\,}\global\edef\storetemp{\the\prontok}$^{\mylaunch{\storetemp}}$
+  \fi
+\fi}
+
+\def\gl#1{\quad\textcolor{colorgl}{#1}\par\nobreak}
+
+\long\def\dictmeaning#1{\par\narrower #1\par}
+\def\nhang{\hangindent\parindent}
+\def\ntextindent#1{\indent\llap{#1\enspace}\ignorespaces}
+\def\numb{\par\nhang\ntextindent}
+\def\num#1{\ifnum#1=1
+\numb{\hfil\vadjust{\vskip\parskip}\break\textcolor{numcolor}{\bfseries #1.}}
+\else
+\numb{\hfil\vadjust{\vskip\parskip}\break\textcolor{numcolor}{\bfseries #1.}}
+\fi}
+\def\eng#1{{\rm #1}}
+\def\engb#1{{\enb #1}}
+\def\engb#1{{\enb #1}}
+\def\engit#1{{\eni #1}}
+\def\enbi{\fontfamily{cmr}\fontseries{bx}\fontshape{it}\fontsize{12pt}{12pt}\selectfont}
+\def\engbit#1{{\enbi{#1}}}
+\def\eni{\fontfamily{cmr}\fontshape{it}\fontsize{12pt}{12pt}\selectfont}
+\def\enb{\fontfamily{cmr}\fontseries{bx}\fontsize{12pt}{12pt}\selectfont}
+\def\alnum#1{\hangindent=32pt\hangafter=1\textcolor{numcolor}{\enb{#1.}}}
+\long\def\bentry{\begingroup\noindent}
+\def\eentry{\par\endgroup\smallbreak}
+
+

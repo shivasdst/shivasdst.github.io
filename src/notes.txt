@@ -1,0 +1,41 @@
+[NKjTl][kKgGcCjJTDNtdnpPbBmyrlvsShL][h]?
+[KjTNl]M
+\word{
+\word[
+\wordwithhyphen
+\wordnospeech
+\wordRemoveSpace
+\wordspecial
+\wordf
+\wordwosas
+
+
+\ecrlink{abbot nuga(1)}{\kan\nuga$(1)$} --> special case to be handled -- done
+\expl{} --> special case to be handled --> done
+
+\hypertarget{acacia(2)}{} 
+\hyperdef{A}{acacia(2)}{}
+\ecrlink{accordingpagu1}{according \pagu(1)} -- done
+
+\dictmeaning{
+\hyperdef{A}{aconite pagu}{}
+\eng{winter aconite} erAMtisf kulada, haLadi hU biDuva caLigAlada sasayx.
+} -- done
+
+\fiveargsf ad captandum {(vulgus)}(1){ad captandum (vulgus)}
+\fiveargsf ad captandum {(vulgus)}(2){ad captandum (vulgus)} -- done
+
+(${\rm \angle ABC}$ \& ${\rm \angle CBD}$). -- done
+
+\dictmeaning{
+\hyperdef{A}{advice pagu}{}
+\eng{take advice} (\kanmu\ kAnUnu \mo\ pariNatariMda) salahe paDe, tegeduko yA adaraMte naDeduko.
+} -- done
+
+= \ecrlink{affaire de coeur}{\engit{affaire de coeur}}. -- done
+
+\wordf(ad personam[1]){ad personam} --> to be handled
+
+\wordsidentical ===> done
+
+\imglink{bay_window:fig}{\pdfimage width 0.5cm height 0.5cm {B_Pictures/bay_window.jpg}} ==> pending

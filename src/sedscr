@@ -1,0 +1,6 @@
+#n
+/\\bentry/{
+	N
+	s/\\bentry\([ \t]*\)\n//
+	p
+}
