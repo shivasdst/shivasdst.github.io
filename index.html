@@ -3,8 +3,12 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/reset.css"> <!-- CSS reset -->
-	<link rel="stylesheet" href="css/style.css"> <!-- Resource style -->
+	<link rel="stylesheet" href="css/reset.css"> 
+	<link rel="stylesheet" href="css/style.css"> 
+	<link rel="stylesheet" href="css/jquery-ui.css">
+	<script src="js/jquery-1.9.1.js"></script>
+	<script src="js/jquery-ui.js"></script>
+	<script src="js/fixhref.js"></script>			
 	<title>Univerity of Mysore - English Kannada Dictionary</title>
 </head>
 <body>
@@ -57,8 +61,13 @@
 				<span class="alpha_link"><a href="src/X/html/x1_uni.html">X</a></span>	
 				<span class="alpha_link"><a href="src/Y/html/y1_uni.html">Y</a></span>	
 				<span class="alpha_link"><a href="src/Z/html/z1_uni.html">Z</a></span>	
-            </div>    
-                
+            </div>
+			<form id="form_data" method="POST">
+				<span class="label_word">Enter the word:</span>&nbsp;&nbsp;
+				<input name="word" type="text" id="select_word" /><br />
+				<button type="submit" value="Submit">Submit</button> &nbsp;&nbsp;
+				<button type="reset" value="Reset">Reset</button>			
+			</form>                
 			</div> <!-- cd-container -->
 		</div> <!-- cd-scrolling-bg -->
 	</main> <!-- cd-main-content -->
